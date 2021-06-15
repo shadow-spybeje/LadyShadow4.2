@@ -1,13 +1,25 @@
 const Logger = {};
 module.exports = Logger;
 
+const log = function(txt){
+    console.log(`\n${txt}`);
+};
+
+/**
+ * Send an unformatted message to the Console.
+ * @param {string} msg Message to print to console.
+ */
+Logger.emit = function(msg){
+    console.log(`> ${msg}`);
+};
+
 /**
  * Send a message to the console.
  * @param {string} msg Message to print to console.
  */
 Logger.print = function(msg){
     if(!msg) return;
-    console.log(`> ${msg}`);
+    log(`> ${msg}`);
 };
 
 /**
@@ -16,7 +28,7 @@ Logger.print = function(msg){
  */
 Logger.debug = function(msg){
     if(!msg) return;
-    console.log(`(DEBUG) ${msg}`);
+    log(`(DEBUG) ${msg}`);
 };
 
 /**
@@ -25,7 +37,7 @@ Logger.debug = function(msg){
  */
 Logger.warn = function(msg){
     if(!msg) return;
-    console.log(`(WARNING) ${msg}`);
+    log(`(WARNING) ${msg}`);
 };
 
 /**
@@ -34,6 +46,6 @@ Logger.warn = function(msg){
  */
  Logger.error = function(msg, error){
     if(!msg) return;
-    console.log(`(ERROR) ${msg}`);
+    log(`(ERROR) ${msg}`);
     if(error) console.error(error);
 };

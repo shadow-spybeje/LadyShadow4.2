@@ -8,7 +8,7 @@ module.exports = async function(bot){
         [dbCreds.username, dbCreds.password],
         {database: "LilithShadow"})
         .then(op => {
-            bot.util.logger.print(`Initialized the database with the options: ${JSON.stringify(op)}\n`);
+            bot.util.logger.print(`Initialized the database with the options: ${JSON.stringify(op)}`);
             dbCreds = undefined; //Clear the credentials.
         })
         .catch(err => {
@@ -31,9 +31,6 @@ module.exports = async function(bot){
             bot.util.logger.print("Module Ready: Phasmo.");
         }catch(e){ bot.util.logger.error("Module Error: Failed to Init 'Phasmo'."); };
         //#endregion
-
-
-        console.log();//Add spacing between next-up and modules.
 
     //#endregion
 

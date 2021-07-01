@@ -1,5 +1,5 @@
 const phasmo = {};
-let ready = false;
+let isReady = false;
 
 //#region phasmo.options description
   // They're options dumbass!! What else do you need to know?!?!
@@ -9,7 +9,7 @@ phasmo.options = {
     debug: false,
 
     // This module's interactor.
-    prefix: "--",
+    prefix: ",,",
 
     // How to split your words/evedince. (Probably should leave this alone...)
     msgSplitter: " ",
@@ -222,10 +222,10 @@ phasmo.evidence = [
 
 /**
  * the "Message Handler" for this module.
- * @param {object} msg {channel, msg:string}
+ * @param {object} msg {channel:channel, msg:string}
  */
 phasmo.msg = async function(msg){
-    if(!ready) return; //if not initialized, or initialization failed. Do not allow module to be used.
+    if(!isReady) return; //if not initialized, or initialization failed. Do not allow module to be used.
 
     if(phasmo.options.debug) console.log("logged with: "+JSON.stringify(msg.msg))
     //msg = {channel:msg.channel, msg:msg.content};

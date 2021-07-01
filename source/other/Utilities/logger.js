@@ -44,7 +44,7 @@ Logger.warn = function(msg){
  * Send an error message to the console.
  * @param {string} msg Error Message to print to console.
  */
- Logger.error = function(msg, error){
+Logger.error = function(msg, error){
     if(!msg) return;
     log(`(ERROR) ${msg}`);
     if(error) console.error(error);

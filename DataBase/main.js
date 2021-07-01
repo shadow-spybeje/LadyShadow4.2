@@ -198,18 +198,16 @@ function print(msg){
  * * `YYYY-MM-DDThh:mm:ss[+|-]hh:mm`
  */
 async function getIsoTime(){
-    let time = Date.now();
-
-    date = (time) => {
-        d = new Date();
+        let d = new Date();
+        let time = Date.now();
 
       //Lets grab all of our relivant Date and Time information.
-        yyyy = d.getFullYear(time);
-        mm = d.getMonth(time) + 1;
-        dd = d.getDate(time);
-        HH = `${d.getHours(time)}`;
-        MM = `${d.getMinutes(time)}`;
-        SS = `${d.getSeconds(time)}`;
+        let yyyy = d.getFullYear(time);
+        let mm = d.getMonth(time) + 1;
+        let dd = d.getDate(time);
+        let HH = `${d.getHours(time)}`;
+        let MM = `${d.getMinutes(time)}`;
+        let SS = `${d.getSeconds(time)}`;
 
 
       //If our Hour, Minute, or Second is in the "ones" add a zero before the number.
@@ -219,9 +217,9 @@ async function getIsoTime(){
 
 
       //Lets set our TimeZone to Pacific Time.
-        pstDay = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
-        pdtDay = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
-        zone = " [zone]";
+      let pstDay = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30];
+      let pdtDay = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
+      let zone = " [zone]";
 
         switch(mm){
             case(11): case(12): case(1): case(2): case(3):
@@ -244,10 +242,7 @@ async function getIsoTime(){
 
       //Lets put all of tis information into a readable string.
         if(mm < 10) mm = `0${mm}`;
-        return `${yyyy}-${mm}-${dd}T${HH}:${MM}:${SS}${zone}`;
-    };
-
-    return date(time);
+    return `${yyyy}-${mm}-${dd}T${HH}:${MM}:${SS}${zone}`;
 };
 //#endregion
 

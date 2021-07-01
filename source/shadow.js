@@ -23,6 +23,7 @@ bot.on('ready', (_bot) => {
     if(!_bot){ Events['READY'](bot); }
     else{ Events['READY'](_bot); };
 });
+bot.on('message', (message) => { Events['MESSAGE'](message) });
 bot.on('guildCreate', (guild) => { Events['GUILD_JOINED'](bot, guild) });
 bot.on('guildDelete', (guild) => { Events['GUILD_LEFT'](bot, guild) });
 

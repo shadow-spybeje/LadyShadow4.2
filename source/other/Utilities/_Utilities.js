@@ -11,14 +11,16 @@ let bot;
 
 /**
  * Initializes the Utilities framework.
- * @param {discordClient} bot discordClient
+ * @param {discordClient} _bot discordClient
  * @returns Utilites.
  */
-Utilities._Init = function(bot){
-    bot = bot;
+Utilities._Init = function(_bot){
+    bot = _bot;
     delete this._Init;
+
+
+    Utilities.logger = require("./logger.js");
+    Utilities.helpers = require("./helpers.js")._Init(bot);
+
     return this;
 };
-
-Utilities.logger = require("./logger.js");
-Utilities.helpers = require("./helpers.js")._Init(bot);

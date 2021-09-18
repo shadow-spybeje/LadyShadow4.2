@@ -44,9 +44,12 @@ module.exports = async function(bot){
         };
 
         if(!bot.locale[lang][key]){
-            if(typeof bot.locale[lang][key] == "boolean") return key;
-            bot.util.helpers.sendTo("console", `Language key: __\`${key}\`__ in the __\`${lang}\`__ lang code was not found..`);
-            lang = "en";
+            if(typeof bot.locale[lang][key] == "boolean"){
+                lang = 'en';
+            }else{
+                bot.util.helpers.sendTo("console", `Language key: __\`${key}\`__ in the __\`${lang}\`__ lang code was not found..`);
+                lang = "en";
+            };
         };
 
         if(!bot.locale['en'][key]){

@@ -3,10 +3,10 @@ const fs = require('fs');
 module.exports = async (bot) => {
     bot.locale = new Map();
     locales = [
-        'da',
-        'de',
-        'fr',
-        'en',
+        'da', //Danish
+        'de', //German
+        'fr', //French
+        'en', //English
     ];
 
     try {

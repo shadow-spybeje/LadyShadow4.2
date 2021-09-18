@@ -105,3 +105,44 @@ Helpers.getUserSettings = async function(userID, createNew){
 
     return results;
 };
+
+
+Helpers.sendTo = async function(ch, msg){
+    if(typeof ch == "string"){
+        switch(ch.toLowerCase()){
+            case('console'): ch = "806398879787909131"; break;
+
+            default: ch = "806398879787909131";
+        };
+    };
+
+
+    console.log(`Posting to: ${ch}\n-> ${msg}`);
+
+    let chan = bot.channels.cache.get(ch);
+    if(!chan){
+        let u = bot.util.helpers.getUser("spy");
+
+        await u.send(`Failed to send to channel \`${ch}\`.\nDoes not exist or I cannot see it.\`\`\`Attempted to send:\`\`\``);
+        await u.send(msg);
+    };
+    chan.send(`<@213250789823610880>,\n${msg}`);
+};
+
+
+Helpers.getUser = async function(user){
+    if(typeof usernick == "string"){
+        switch(ch.toLowerCase()){
+            case('spy'): user = "213250789823610880"; break;
+
+            default: ch = "213250789823610880";
+        };
+    };
+
+    let p = new Promise(async function(resolve, reject){
+        let u = await bot.users.cache.fetch(user);
+        if(!u) reject(`Could not find a user with that ID! -- "${user}"`)
+        resolve(u);
+    });
+    return p;
+}

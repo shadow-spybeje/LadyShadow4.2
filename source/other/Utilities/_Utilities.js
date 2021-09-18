@@ -21,6 +21,7 @@ Utilities._Init = function(_bot){
 
     Utilities.logger = require("./logger.js");
     Utilities.helpers = require("./helpers.js")._Init(bot);
+    Utilities.other = require("./other.js")._Init(bot);
 
     return this;
 };

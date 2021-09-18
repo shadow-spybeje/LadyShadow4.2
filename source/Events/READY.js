@@ -24,17 +24,39 @@ module.exports = (bot) => {
 
         bot.isEmit = false;
         return;
-    }else{
-
-        bot.util.logger.print(`Client Ready.\n> • ${bot.user.tag} (${bot.user.id})`);
-
-        emitEvents.forEach(async (event) => {
-            bot.util.logger.print(`Emit Event: ${event}`);
-            if(event == "ready"){
-                bot.isEmit = true;
-                return await bot.emit(event, bot);
-            };
-            await bot.emit(event, Events[event]);
-        });
     };
+
+    bot.util.logger.print(`Client Ready.\n> • ${bot.user.tag} (${bot.user.id})`);
+
+    emitEvents.forEach(async (event) => {
+        bot.util.logger.print(`Emit Event: ${event}`);
+        if(event == "ready"){
+            bot.isEmit = true;
+            return await bot.emit(event, bot);
+       };
+        await bot.emit(event, Events[event]);
+    });
+
+    //#region Eval Restart ('eval k()') checker, notify complete if was an eval restart.
+    bot.db.get("_Config", {}, {_id:0})
+        .then(res => {
+
+            r = res[0];
+            if(r.evalRestart.messageID != 0){
+                bot.db.edit("_Config", {}, {"evalRestart": {"channelID":0,"messageID":0,"Timestamp":0}})
+                    .then()
+                    .catch(err => bot.util.logger.error(`There was an error resetting evalRestart params:\n`, err));
+
+                bot.channels.cache.get(r.evalRestart.channelID).messages.fetch(r.evalRestart.messageID).then(msg => {
+                    let ms = Date.now() - r.evalRestart.Timestamp;
+                    msg.edit(`Restart Complete!\nTook: \`${ms}ms\``)
+                })
+            };
+        })
+        .catch(err => {
+            bot.util.logger.error(`There was an error requesting '_Config' file data:\n`, err);
+        })
+    //#endregion
+
+    
 };

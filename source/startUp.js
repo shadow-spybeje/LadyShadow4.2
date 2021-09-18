@@ -31,22 +31,70 @@ module.exports = async function(bot){
     //#endregion
 
 
+    bot.cmds = await require('./Commands/_index.js')(); //Load our Commands.
+    bot.locale = await require('./Localisation/_index.js')(bot); //Load our Localisations.
+    bot.l = function(msg, key){
+        const bot = msg.client;
+        let lang = bot._users[msg.author.id].lang;
+        let results;
+
+        if(!bot.locale[lang]){
+            bot.util.helpers.sendTo("console", `Langauge code: __\`${lang}\`__ not found in the Locales...`);
+            lang = "en";
+        };
+
+        if(!bot.locale[lang][key]){
+            if(typeof bot.locale[lang][key] == "boolean") return key;
+            bot.util.helpers.sendTo("console", `Language key: __\`${key}\`__ in the __\`${lang}\`__ lang code was not found..`);
+            lang = "en";
+        };
+
+        if(!bot.locale['en'][key]){
+            results = key;
+        }else{
+            results = bot.locale[lang][key];
+        };
+
+        return results;
+    ;}
+
+
     /**
      * External Modifications to the bot.
      * Usually executed before a prefix check. (Mostly by an internal prefic of its own!)
      */
     //#region External Modules
+
+    console.log(`\n>>> Loading Modules <<<`);
     bot.mods = {};
 
         //#region Phasmophobia (phasmo.js)
         try{
             bot.mods.phasmo = require("./other/phasmo")._Init();
             //console.log(bot.mods.phasmo.options)
-            bot.util.logger.print("Module Ready: Phasmo.");
+            console.log("> Module Ready: Phasmo.");
         }catch(e){ bot.util.logger.error("Module Error: Failed to Init 'Phasmo'."); };
         //#endregion
 
     //#endregion
+
+
+    bot._users = new Map();
+    bot._guilds = new Map();
+    bot.db.get("Users", {}).then(results => {
+        for(let x = 0; x < results.length; x++){
+            let y = results[x];
+            bot._users[y.id] = y;
+        };
+    }).catch(err => { bot.util.logger.error(`Error loading User Data from the DataBase:\n`, err); });
+
+    bot.db.get("Guilds", {}).then(results => {
+        for(let x = 0; x < results.length; x++){
+            let y = results[x];
+            bot._guilds[y.id] = y;
+        };
+    }).catch(err => { bot.util.logger.error(`Error loading Guild Data from the DataBase:\n`, err); });
+
 
     return bot;
 };

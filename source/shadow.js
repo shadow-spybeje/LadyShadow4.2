@@ -13,11 +13,7 @@ const bot = new discord.Client({ ws: { intents: 14087 } });
 
 require('./startUp.js')(bot);
 
-/**
- * The Available Events for this client.
- * * READY
- */
-const Events = require('./events/_index.js');
+const Events = require('./Events/_index.js'); //Load our Events.
 
 bot.on('ready', (_bot) => {
     if(!_bot){ Events['READY'](bot); }

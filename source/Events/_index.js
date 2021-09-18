@@ -7,12 +7,15 @@ const EventList = keyMirror([
     'READY', // ready
 ]);
 
+
+console.log(`\n>>> Loading Events <<<`)
 for (const name of Object.keys(EventList)) {
-  try {
-    console.log(name);
-    Events[name] = require(`./${name}.js`);
-  } catch(err) { console.error(err); } // eslint-disable-line no-empty
-  console.log(Events)
+	try {
+		console.log(`> Loaded Event: ${name}`);
+		Events[name] = require(`./${name}.js`);
+	} catch(err) {
+		console.error(`> WARN: Failed to load event: ${name}!`, err);
+	} // eslint-disable-line no-empty
 }
 
 module.exports = Events;

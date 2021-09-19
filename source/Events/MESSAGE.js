@@ -99,25 +99,25 @@ module.exports = async (message) => {
         if(!Cmd) return;
 
 
-        if(!bot._users[message.author.id]){
+        if(!bot.Users[message.author.id]){
             let data = {
                 id: message.author.id,
-                lang: 'en-us'
+                lang: 'en'
             };
-            bot._users[message.author.id] = data;
+            bot.Users[message.author.id] = data;
             bot.db.post("Users", data).catch(err => bot.util.logger.error(`Error occured while posting user data:\n`, err))
         };
 
         // Since we have a command we need to be sure to set the users' language.
         // We need to check the database for an existing language, otherwise use en/us.
-        if(!bot._users[message.author.id].lang) bot.db.get("Users", {id:message.author.id}, {_id:0, id:1, lang:1})
+        if(!bot.Users[message.author.id].lang) bot.db.get("Users", {id:message.author.id}, {_id:0, id:1, lang:1})
             .then(results => {
                 if(results.length != 0 && results[0].lang != null){
-                    bot._users[message.author.id].lang = results[0].lang;
+                    bot.Users[message.author.id].lang = results[0].lang;
                 }else{ //We don't have a file for this user.
-                    bot.db.edit("Users", {id:message.author.id}, {"lang": "en-us"})
+                    bot.db.edit("Users", {id:message.author.id}, {"lang": "en"})
                     .catch(err => bot.util.logger.error(`Error occured while editing user data:\n`, err));
-                    bot._users[message.author.id].lang = 'en-us'
+                    bot.Users[message.author.id].lang = 'en'
                 };
             })
 
@@ -125,6 +125,10 @@ module.exports = async (message) => {
         if(Cmd.Access){
             if(Cmd.Access == 'Dev' && message.author.id != '213250789823610880') return message.react('❌');
         }; //Cmd.Access
+
+        if(Cmd.args && args.length == 0){
+            return message.channel.send(`${await message.client.l(message, `$cmd_usage`)}\`${await message.client.l(message, `$cmd_${Cmd.name}_name`)}${await message.client.l(message, `$cmd_${Cmd.name}_usage`)}\``);
+        };
 
         Cmd.Execute(message, args);
 

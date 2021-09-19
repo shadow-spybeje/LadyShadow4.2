@@ -1,12 +1,14 @@
+const discord = require('discord.js');
 const fs = require('fs');
 
 module.exports = async () => {
-    const cmds = new Map();
+    const cmds = new discord.Collection();
 
     const Dir = './source/Commands/';
     const CommandDir = [
         'Dev', //Bot Developer + Owners
         'General',
+        'Moderation',
         //'Owner'
     ];
 

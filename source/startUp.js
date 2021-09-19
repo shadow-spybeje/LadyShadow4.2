@@ -35,7 +35,7 @@ module.exports = async function(bot){
     bot.locale = await require('./Localisation/_index.js')(bot); //Load our Localisations.
     bot.l = function(msg, key){
         const bot = msg.client;
-        let lang = bot._users[msg.author.id].lang;
+        let lang = bot.Users[msg.author.id].lang;
         let results;
 
         if(!bot.locale[lang]){
@@ -82,19 +82,19 @@ module.exports = async function(bot){
     //#endregion
 
 
-    bot._users = new Map();
-    bot._guilds = new Map();
+    bot.Users = new Map();
+    bot.Guilds = new Map();
     bot.db.get("Users", {}).then(results => {
         for(let x = 0; x < results.length; x++){
             let y = results[x];
-            bot._users[y.id] = y;
+            bot.Users[y.id] = y;
         };
     }).catch(err => { bot.util.logger.error(`Error loading User Data from the DataBase:\n`, err); });
 
     bot.db.get("Guilds", {}).then(results => {
         for(let x = 0; x < results.length; x++){
             let y = results[x];
-            bot._guilds[y.id] = y;
+            bot.Guilds[y.id] = y;
         };
     }).catch(err => { bot.util.logger.error(`Error loading Guild Data from the DataBase:\n`, err); });
 

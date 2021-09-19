@@ -111,6 +111,7 @@ Helpers.sendTo = async function(ch, msg){
     if(typeof ch == "string"){
         switch(ch.toLowerCase()){
             case('console'): ch = "806398879787909131"; break;
+            case('bugs'): ch = "823104309356527616"; break;
 
             default: ch = "806398879787909131";
         };
@@ -126,7 +127,8 @@ Helpers.sendTo = async function(ch, msg){
         await u.send(`Failed to send to channel \`${ch}\`.\nDoes not exist or I cannot see it.\`\`\`Attempted to send:\`\`\``);
         await u.send(msg);
     };
-    chan.send(`<@213250789823610880>,\n${msg}`);
+
+    chan.send(`${msg}`);
 };
 
 
@@ -146,3 +148,49 @@ Helpers.getUser = async function(user){
     });
     return p;
 }
+
+
+/**
+ * Parses an @user discord mention, and returns the ID of that mention.
+ * @param {string} mention Discord User <@[!]DiscordID>
+ */
+Helpers.getUserMention = async function(mention){
+    let isMention = null;
+    if(isNaN(mention)){ isMention = true; }else{ isMention = false; };
+
+    // The id is the first and only match found.
+    let matches = null;
+    if(isMention){
+        matches = mention.match(/^<@!?(\d+)>$/);
+        if(!matches) return;
+    }else{
+        matches = ["", mention];
+    };
+
+    // However the first element in the matches array will be the entire mention, not just the ID,
+    // so use index 1.
+    const id = matches[1];
+
+    //Grab the user. If we don't know who they are, ask discord.
+    let u = null;
+    try{
+        u = await bot.users.fetch(id);
+    }catch(err){
+        console.log(`${err.name} -> ${err.message}`, 1);
+    };
+    //If the user isn't a true discord user, return undefined.
+    if(!u) return;
+
+    return u;
+}
+
+
+/**
+ * Gets a number between {min} and {max}.
+ * @param {Number} min Absolute Minimum number to get.
+ * @param {Number} max Absolute Maximum number to get.
+ * @returns
+ */
+Helpers.randomInt = function randomIntFromInterval(min, max) { // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min)
+};

@@ -1,5 +1,5 @@
 const L = async function(m,key){
-    m.client.l(m,`$cmd_ping_${key}`);
+    return await m.client.l(m,`$cmd_%%_${key}`);
 };
 
 command = {

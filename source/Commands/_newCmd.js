@@ -11,7 +11,7 @@ command = {
 
 command.help = "";
 
-command.Execute = async function(message){
+command.Execute = async function(message, args){
 
 };
 

@@ -48,7 +48,7 @@ module.exports = async (message) => {
             if(Cmd.Access == 'Dev' && message.author.id != '213250789823610880') return message.react('❌');
         }; //Cmd.Access
 
-        if(Cmd.args && args.length == 0){
+        if(Cmd.args && args.length == 0 && !Cmd.EasterEgg){
             return message.channel.send(`${await message.client.l(message, `$cmd_usage`)}\`${await message.client.l(message, `$cmd_${Cmd.name}_name`)}${await message.client.l(message, `$cmd_${Cmd.name}_usage`)}\``);
         };
 

@@ -3,7 +3,9 @@ command = {
     Access: "Dev",
     aliases: [],
     description: "$cmd_eval_desc",
-    usage: "$cmd_eval_usage"
+    usage: "$cmd_eval_usage",
+    args: true,
+    EasterEgg: true,
 };
 
 command.help = "";

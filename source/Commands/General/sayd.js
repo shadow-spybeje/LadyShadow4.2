@@ -6,7 +6,10 @@ command = {
     name: "sayd",
     aliases: [],
     description: "$cmd_%%_desc",
-    usage: "$cmd_%%_usage"
+    usage: "$cmd_%%_usage",
+    args: true,
+
+    EasterEgg: true,
 };
 
 command.help = "";

@@ -1,6 +1,6 @@
 {
   "name": "ladyshadow_v4",
-  "version": "4.0.0",
+  "version": "4.2.1a",
   "description": "LadyShadow is a basic Discord Moderation bot with other logging features.\\nShadow includes other \"fun\" commands, as well as being the central hub for a Server to Server \"Rift\" and the main place for the \"Shadow RPG\".",
   "main": "shard.js",
   "directories": {

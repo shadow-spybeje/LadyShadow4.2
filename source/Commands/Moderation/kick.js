@@ -19,7 +19,7 @@ command.Execute = async function(message, args){
     let member = await message.client.util.helpers.getUserMention(args.shift());
     if(!member) return message.reply(await L(message, "noMember"));
 
-    if(!message.guild.me.hasPermission("KICK_MEMBERS")) return message.reply(`${await L(message, `noPerms-Client`)} ${member.username}\`!\n--> ${member}`)
+    if(!message.guild.me.hasPermission("KICK_MEMBERS")) return message.reply(`${await L(message, `noPerms-Client`)}${member.username}\`!\n--> ${member}`)
 
     let reason = args.join(" ") || `Kicked by: ${message.author.tag} (${message.author.id})`;
 

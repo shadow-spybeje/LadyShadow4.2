@@ -16,7 +16,7 @@ const Events = {
     },
 };
 
-module.exports = (bot) => {
+module.exports = async (bot) => {
 
     if(bot.isEmit){ //This is an Emit;
         bot.util.logger.emit(`Client Ready.\n> • DiscordClient#0000 (0000)`);
@@ -26,7 +26,22 @@ module.exports = (bot) => {
         return;
     };
 
-    bot.util.logger.print(`Client Ready.\n> • ${bot.user.tag} (${bot.user.id})`);
+    await bot.user.setPresence({
+        status: "idle",
+        _activity: {
+            type: "STREAMING",
+            name: `the Beta Version. | ${bot.config.prefix}help`,
+            url: "https://www.twitch.tv/scion_spy"
+        },
+        activity: {
+            type: "WATCHING",
+            name: `${bot.config.prefix}help | v.${bot.config.version}`,
+        }
+    });
+
+    let p = bot.user.presence;
+    let a = p.activities[0];
+    bot.util.logger.print(`Client Ready.\n> • ${bot.user.tag} (${bot.user.id}) | (${p.status}) "${a.type}: ${a.name}"`);
 
     emitEvents.forEach(async (event) => {
         bot.util.logger.print(`Emit Event: ${event}`);
@@ -58,5 +73,5 @@ module.exports = (bot) => {
         })
     //#endregion
 
-    
+
 };

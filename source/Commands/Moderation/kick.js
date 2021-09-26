@@ -4,6 +4,7 @@ const L = async function(m,key){
 
 command = {
     name: "kick",
+    name_L: "$cmd_kick_name",
     aliases: ['boot'],
     description: "$cmd_kick_desc",
     usage: "$cmd_kick_usage",

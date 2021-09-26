@@ -6,7 +6,7 @@ const L = async function(m,key){
 
 command = {
     name: "ping",
-    name2: "$cmd_ping_name",
+    name_L: "$cmd_ping_name",
     aliases: ["pong"],
     description: "$cmd_ping_desc",
     usage: "$cmd_ping_usage"

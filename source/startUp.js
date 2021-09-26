@@ -2,6 +2,7 @@ module.exports = async function(bot){
 
     bot.config = {
         prefix:"..",
+        version: require("../package.json").version,
 
         support: {
             server: {
@@ -44,7 +45,7 @@ module.exports = async function(bot){
         };
 
         if(!bot.locale[lang][key]){
-            if(typeof bot.locale[lang][key] == "boolean"){
+            if(bot.locale[lang][key] === false){
                 lang = 'en';
             }else{
                 bot.util.helpers.sendTo("console", `Language key: __\`${key}\`__ in the __\`${lang}\`__ lang code was not found..`);

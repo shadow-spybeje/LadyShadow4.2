@@ -24,7 +24,7 @@ command.Execute = async function(message, args){
 
     let member = await message.client.util.helpers.getUserMention(args.shift());
     if(!member) return message.reply(await L(message, "noMember"));
-    //if(!member.bannable) return message.reply(await L(message, "notBannable"));
+    if(!member.bannable) return message.reply(await L(message, "notBannable"));
 
     let reason = "";
     if(args.length == 0){

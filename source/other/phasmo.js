@@ -93,98 +93,122 @@ phasmo._Init = function(options = {}){
 /**
  * Our built-in ghost database!
  */
-phasmo.ghosts = [
-        /*{
-            type: "",
-            evidence: [],
-            strength: "",
-            weakness: "",
-            tip: ""
-        },*/
+ phasmo.ghosts = [
+    /*{
+        type: "",
+        evidence: [],
+        strength: "",
+        weakness: "",
+        tip: ""
+    },*/
     {
-        type: "Spirit",
-        evidence: ["Spirit Box", "Fingerprints", "Ghost Writing"],
-        strength: "None",
-        weakness: "Using smudge sticks to prevent attacks; for about 180s.",
-        tip:""
+        "type": "Demon",
+        "evidence": [ "Freezing Temps", "Ghost Writing", "Fingerprints" ],
+        "strength": "Will attack aggressively",
+        "weakness": "Asking a question on a ouija board won’t lower a player’s sanity.",
+        "tip": ""
+    },
+    {
+        "type": "Mare",
+        "evidence": [ "Spirit Box", "Ghost Writing", "Ghost Orb" ],
+        "strength": "Increased attacks in the dark",
+        "weakness": "Light",
+        "tip": "Turn on lights in the Ghost's room to decrease the chance of a hunt."
+    },
+    {
+        "type": "Jinn",
+        "evidence": [ "EMF 5", "Fingerprints", "Freezing Temps" ],
+        "strength": "The further you are away, the faster a Jinn is",
+        "weakness": "Turning off a location’s power source will make the Jinn slower.",
+        "tip": ""
+    },
+    {
+        "type": "Poltergeist",
+        "evidence": [ "Spirit Box", "Ghost Writing", "Fingerprints" ],
+        "strength": "Can throw multiple objects at once",
+        "weakness": "Empty rooms",
+        "tip": ""
+    },
+    {
+        "type": "Revenant",
+        "evidence": [ "Ghost Orbs", "Ghost Writing", "Freezing Temps" ],
+        "strength": "Fast when hunting.",
+        "weakness": "Slow when you are hidden.",
+        "tip": "You **Cannot** outrun a Revenant!"
+    },
+    {
+        "type": "Shade",
+        "evidence": [ "EMF 5", "Ghost Writing", "Freezing Temps" ],
+        "strength": "Hard to find.",
+        "weakness": "A shade won’t hunt if players are in groups.",
+        "tip": "Stay together in the ghost's room!"
+    },
+    {
+        "type": "Spirit",
+        "evidence": [ "EMF 5", "Spirit Box", "Ghost Writing" ],
+        "strength": "None",
+        "weakness": "Using smudge sticks to prevent attacks; for about 180s.",
+        "tip": ""
+    },
+    {
+        "type": "Hantu",
+        "evidence": [ "Ghost Orbs", "Freezing Temps", "Fingerprints" ],
+        "strength": "Lower temperatures make the ghost faster!",
+        "weakness": "Hantu moves slower in warm areas.",
+        "tip": "Keep the power on to avoid the house getting cold!"
+    },
+    {
+        "type": "Phantom",
+        "evidence": [ "Spirit Box", "Fingerprints", "DOTS Projector" ],
+        "strength": "Looking at a phantom will cause your sanity to drop",
+        "weakness": "Taking its photo will cause it to disappear",
+        "tip": "Trying to take it's photo during a hunt is not only a bad idea, but is not effective."
+    },
+    {
+        "type": "Yurei",
+        "evidence": [ "Ghost Orbs", "Freezing Temps", "DOTS Projector" ],
+        "strength": "Affects player sanity more than normal",
+        "weakness": "Using a smudge stick to prevent it from moving",
+        "tip": ""
+    },
+    {
+        "type": "Banshee",
+        "evidence": [ "Ghost Orbs", "Fingerprints", "DOTS Projector" ],
+        "strength": "Targets one player at a time (that is terrifying)",
+        "weakness": "The crucifix",
+        "tip": "A Banshee can spontaneously start a hunt if it's target is out of sight for 20s after teleporting to them.\n  Due to this, it's a good cause to believe you're dealing with a Banshee if a Hunt starts while everyone is 80% Sanity or more."
+    },
+    {
+        "type": "Oni",
+        "evidence": [ "EMF 5", "Freezing Temps", "DOTS Projector" ],
+        "strength": "Can move objects quickly",
+        "weakness": "Active when more players are nearby",
+        "tip": ""
+    },
+    {
+        "type": "Wraith",
+        "evidence": [ "EMF 5", "Spirit Box", "DOTS Projector" ],
+        "strength": "Footsteps cannot be traced",
+        "weakness": "Reacts to salt",
+        "tip": ""
     },{
-        type: "Revenant",
-        evidence: ["EMF Level 5", "Fingerprints", "Ghost Writing"],
-        strength: "Fast when hunting.",
-        weakness: "Slow when you are hidden.",
-        tip: "You **Cannot** outrun a Revenant!"
+        "type": "Goryo",
+        "evidence": ["EMF 5", "Fingerprints", "DOTS Projector"],
+        "strength": "Usually shows on camera when alone",
+        "weakness": "Rarely wanders far from favorite room",
+        "tip": "Aim a camera at the DOTS, Goryos can only be seen through them!"
     },{
-        type: "Demon",
-        evidence: ["Spirit Box", "Ghost Writing", "Freezing Temperatures"],
-        strength: "Will attack aggressively",
-        weakness: "Asking a question on a ouija board won’t lower a player’s sanity.",
-        tip: ""
+        "type": "Myling",
+        "evidence": ["EMF 5", "Ghost Writing", "Fingerprints"],
+        "strength": "Quieter when hunting",
+        "weakness": "Frequently makes paranormal sounds",
+        "tip": "Be quiet! They are more sensitive to player noises, and it angers them!!!"
     },{
-        type: "Shade",
-        evidence: ["EMF Level 5", "Ghost Orb", "Ghost Writing"],
-        strength: "Hard to find.",
-        weakness: "A shade won’t hunt if players are in groups.",
-        tip: "Stay together in the ghost's room!"
-    },{
-        type: "Mare",
-        evidence: ["Spirit Box", "Ghost Orb", "Freezing Temperatures"],
-        strength: "Increased attacks in the dark",
-        weakness: "Light",
-        tip: "Turn on lights in the Ghost's room to decrease the chance of a hunt."
-    },{
-        type: "Banshee",
-        evidence: ["EMF Level 5", "Fingerprints",  "Freezing Temperatures"],
-        strength: "Targets one player at a time (that is terrifying)",
-        weakness: "The crucifix",
-        tip: "A Banshee can spontaneously start a hunt if it's target is out of sight for 20s after teleporting to them.\n  Due to this, it's a good cause to believe you're dealing with a Banshee if a Hunt starts while everyone is 80% Sanity or more."
-    },{
-        type: "Wraith",
-        evidence: ["Fingerprints", "Freezing Temperatures", "Spirit Box"],
-        strength: "Footsteps cannot be traced",
-        weakness: "Reacts to salt",
-        tip: ""
-    },{
-        type: "Phantom",
-        evidence: ["EMF Level 5", "Ghost Orb", "Freezing Temperatures"],
-        strength: "Looking at a phantom will cause your sanity to drop",
-        weakness: "Taking its photo will cause it to disappear",
-        tip: "Trying to take it's photo during a hunt is not only a bad idea, but is not effective."
-    },{
-        type: "Yurei",
-        evidence: ["Ghost Orb", "Ghost Writing", "Freezing Temperatures"],
-        strength: "Affects player sanity more than normal",
-        weakness: "Using a smudge stick to prevent it from moving",
-        tip: ""
-    },{
-        type: "Jinn",
-        evidence: ["Spirit Box", "Ghost Orb", "EMF Level 5"],
-        strength: "The further you are away, the faster a Jinn is",
-        weakness: "Turning off a location’s power source will make the Jinn slower.",
-        tip: ""
-    },{
-        type: "Poltergeist",
-        evidence: ["Spirit Box", "Fingerprints", "Ghost Orb"],
-        strength: "Can throw multiple objects at once",
-        weakness: "Empty rooms",
-        tip: ""
-    },{
-        type: "Oni",
-        evidence: ["EMF Level 5", "Spirit Box", "Ghost Writing"],
-        strength: "Can move objects quickly",
-        weakness: "Active when more players are nearby",
-        tip: ""
-    },{
-        type: "Yokai",
-        evidence: ["Ghost Orb", "Spirit Box", "Ghost Writing"],
-        strength: "Talking near this ghost makes it much angrier and more likely to attack!",
-        weakness: "When hunting, a Yokai can only hear near itself.",
-        tip: "It appears this ghost can hunt above 50% sanity if you make it angry enough by talking."
-    },{
-        type: "Hantu",
-        evidence: ["Fingerprints", "Ghost Orb", "Ghost Writing"],
-        strength: "Lower temperatures make the ghost faster!",
-        weakness: "Hantu moves slower in warm areas.",
-        tip: "Keep the power on to avoid the house getting cold!"
+        "type": "Yokai",
+        "evidence": ["Ghost Orbs", "Spirit Box", "DOTS Projector"],
+        "strength": "Talking near it makes it angrier and more likely to attack",
+        "weakness": "When hunting, it can only hear close to it",
+        "tip": "It appears this ghost can hunt above 50% sanity if you make it angry enough by talking."
     }
 ];
 

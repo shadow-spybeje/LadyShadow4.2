@@ -22,9 +22,10 @@ module.exports = async (bot, guild) => {
         console.log('ELSE')
         data = {
             id: guild.id,
-            active: true,
             config: {
                 prefix:bot.config.prefix,
+                welcomeMsg: "",
+                farewellMsg: ""
             },
             channels: {
                 welcome: "",
@@ -42,7 +43,7 @@ module.exports = async (bot, guild) => {
                 welcome: "",
             },
             blacklist: [
-                {id:"", time:"", reason:""}
+                //{id:"", time:"", reason:""}
             ],
         };
     };

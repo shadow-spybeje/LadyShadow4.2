@@ -3,8 +3,8 @@ const EventList = keyMirror([
     //'./Events NAME', // discord event name;
     'GUILD_JOINED', // guildCreate
     'GUILD_LEFT', // guildDelete
-    //'MEMBER_JOINED', //guildMemberAdd
-    //'MEMBER_LEFT', //guildMemberRemove
+    'MEMBER_JOINED', //guildMemberAdd
+    'MEMBER_LEFT', //guildMemberRemove
     'MESSAGE', // message
     'READY', // ready
 ]);

@@ -1,7 +1,16 @@
 module.exports = {
     "$cmd_usage": "I'm sorry but that command requires other paramaters...\n  Please try ",
 
+    //in the '${cmd_%%_usage}' field, using '{cmdName}' will replace with the commands name.
+    // example: name = 'testCMD'; usage = 'this is a test command for {cmdName}';
+    // output: 'this is a test command for testCMD'
 
+
+    // ====== ===== ======\\
+    // ===== GENERAL =====\\
+    // ====== ===== ======\\
+
+    // ====== PING ====== \\
     "$cmd_ping_name": "ping",
     "$cmd_ping_desc": "",
 
@@ -9,6 +18,35 @@ module.exports = {
     "$cmd_ping_Pong": "Pong!",
     "$cmd_ping_Client": "Client",
     "$cmd_ping_API": "API",
+
+
+    // ====== TODO ====== \\
+
+    "$cmd_todo_name": "todo",
+    "$cmd_todo_desc": "Shadow save's your todo lists for you as you let her know what you need to do!",
+    "$cmd_todo_usage": `<+|-> <todo message> || {cmdName} list`,
+
+    //TODO Args (Phrases required to run commands/subcommands.)
+    "$cmd_todo_args_list": "list", //Show the todos
+    "$cmd_todo_args_add": "+;add",  //Add to the todo's
+    "$cmd_todo_args_del": "-;del;delete;remove",  //Delete the todo's
+
+    "$cmd_todo_invalid_usage": `Invalid Usage. Please try one of the following:\n`+
+      "  `{prefix}{cmdName} {$cmd_todo_args_list}\n`"+
+      "  `{prefix}{cmdName} + <ToDo message>\n`"+
+      "  `{prefix}{cmdName} - <ToDo #>`",
+
+    //TODO - List Messages
+    "$cmd_todo_noToDos": "You don't have any toDo's yet! Try creating one with:\n"+
+      "`{prefix}{cmdName} + <ToDo message>`",
+
+    //TODO - Add messages
+    "$cmd_todo_invalid_usage-add": "Invalid Usage.\nPlease try: `{prefix}{cmdName} + <ToDo message>`\n"+
+      "  Example: `{prefix}{cmdName} + Create my first to do!`",
+
+    //TODO - Del messages
+    "$cmd_todo_invalid_usage-del": "Invalid Usage.\nPlease try: `{prefix}{cmdName} - <ToDo #>`\n"+
+      "  Example: `{prefix}{cmdName} - 1`",
 
 
     // ====== ==== ======\\

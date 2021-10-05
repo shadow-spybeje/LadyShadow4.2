@@ -101,5 +101,8 @@ Logger.error = function(msg, error){
     if(error){
         console.error(error);
         filePrint({file: 'err', msg:`(ERROR) ${msg}\n${error.stack}`});
+    }else{
+
+        filePrint({file: 'err', msg:`(ERROR) ${msg}`});
     };
 };

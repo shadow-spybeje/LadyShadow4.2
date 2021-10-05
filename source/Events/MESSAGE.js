@@ -2,7 +2,14 @@ module.exports = async (message) => {
 
     const bot = message.client;
 
-    if(message.author.bot) return;
+    if(message.author.bot){
+        bot.stats.read.bot++;
+        if(!bot.stats.read.x.B.includes(message.author.id)) bot.stats.read.x.B.push(message.author.id);
+        return
+    }else{
+        bot.stats.read.human++;
+        if(!bot.stats.read.x.H.includes(message.author.id)) bot.stats.read.x.H.push(message.author.id);
+    };
     //if(message.author.id != "213250789823610880") return;
 
     let wasModule = await message.client.functions['ShadowModules'].checkForValidModules(message);
@@ -24,7 +31,9 @@ module.exports = async (message) => {
         if(!bot.Users[message.author.id]){
             let data = {
                 id: message.author.id,
-                lang: 'en'
+                prefix: bot.config.prefix,
+                lang: 'en',
+                todo: {}
             };
             bot.Users[message.author.id] = data;
             bot.db.post("Users", data).catch(err => bot.util.logger.error(`Error occured while posting user data:\n`, err))
@@ -49,9 +58,14 @@ module.exports = async (message) => {
         }; //Cmd.Access
 
         if(Cmd.args && args.length == 0 && !Cmd.EasterEgg){
-            return message.channel.send(`${await message.client.l(message, `$cmd_usage`)}\`${await message.client.l(message, `$cmd_${Cmd.name}_name`)}${await message.client.l(message, `$cmd_${Cmd.name}_usage`)}\``);
+            return message.channel.send(
+                `${await message.client.l(message, `$cmd_usage`)}`+
+                `\`${await message.client.l(message, `$cmd_${Cmd.name}_name`)} `+
+                `${await message.client.l(message, `$cmd_${Cmd.name}_usage`).replace(/{cmdName}/g, Cmd.name)}\``
+            );
         };
 
+        bot.stats.c++;
         Cmd.Execute(message, args);
 
     }catch(err){

@@ -11,10 +11,25 @@ command = {
 command.help = "";
 
 
-function clean(text){
-    if (typeof(text) === "string") return text.replace(/`/g, "`" + String.fromCharCode(8203)).replace(/@/g, "@" + String.fromCharCode(8203));
+function clean(text, bot){
+    if (typeof(text) === "string") return text
+        .replace(/`/g, "`" + String.fromCharCode(8203))
+        .replace(/@/g, "@" + String.fromCharCode(8203))
+        .replace(bot.token, "INVALID-TOKEN");
     else return text;
 };
+
+/*const clean = async (evaled, bot) => {
+    //if (evaled && evaled.constructor.name == "Promise") evaled = await evaled;
+
+    if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
+
+    evaled = evaled
+      .replace(/`/g, "`" + String.fromCharCode(8203))
+      .replace(/@/g, "@" + String.fromCharCode(8203));
+
+    return evaled;
+};*/
 
 
 command.Execute = async function(message, args){
@@ -39,12 +54,15 @@ command.Execute = async function(message, args){
         if(kill) process.exit();
     };
 
+    let inviteLink = 'https://discord.com/oauth2/authorize?client_id=378974861046841344&scope=bot&permissions=469855430'
+
+    let stats = `I've read a total of (${bot.stats.read.human + bot.stats.read.bot}) messages.\n  Of those, (${bot.stats.read.human}) were from humans, and (${bot.stats.read.bot}) were from other bots.\n    I have executed (${bot.stats.c}) commands for the humans.\n\nOf these messages, I have watched and learned from (${bot.stats.read.x.H.length}) different humans and (${bot.stats.read.x.B.length}) unique bots.`;
 
     try{
-        const code = args.join(" ");
-        let evaled = eval(code);
+        let evaled = eval(args.join(" "));
         if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
-        message.channel.send(clean(evaled), {code:"js", split:true});
+        const cleaned = await clean(evaled, message.client);
+        message.channel.send(cleaned, {code:"js", split:true});
     }catch(err){
         message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
     }

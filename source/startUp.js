@@ -1,5 +1,16 @@
 module.exports = async function(bot){
 
+    bot.stats = {
+        read: { //read Messages
+            human:0,
+            bot: 0,
+            x: {
+                H: [],
+                B: []
+            }
+        },
+        c:0 //cmds
+    };
     bot.config = {
         prefix:"..",
         version: require("../package.json").version,
@@ -29,6 +40,9 @@ module.exports = async function(bot){
             dbCreds = undefined; //Clear the credentials.
             return bot.util.logger.warn(err);
         });
+
+    db2 = require('../DataBase/helpers.js');
+    bot.db2 = new db2(bot, bot.db);
     //#endregion
 
 

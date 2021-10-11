@@ -1,59 +1,13 @@
-module.exports = async (bot, guild) => {
-    let msg = `Joined Guild: \`(${guild.id}) ${guild.name}\``;
-
-    if(!guild.isEmit){ bot.util.logger.print(msg);
-    }else{ bot.util.logger.emit(msg); };
+module.exports = async (guild) => {
+    const bot = guild.client;
 
     let ch = bot.channels.cache.get(bot.config.support.server.guildStatus);
     if(!ch) return bot.util.logger.warn(`Client does not have access to the SupportGuldJoinChannel!`)
 
-    let result, data, err;
-    try{
-        await bot.db.get("Guilds", {id:guild.id}).then(r => result = r[0]);
-    }catch(err){
-        console.log(err);
-    };
-    if(result){
-        console.log('has a resullt')
-        data = result;
-        data['active'] = true;
-        console.log(data)
-    }else{
-        console.log('ELSE')
-        data = {
-            id: guild.id,
-            config: {
-                prefix:bot.config.prefix,
-                welcomeMsg: "",
-                farewellMsg: ""
-            },
-            channels: {
-                welcome: "",
-                farewell: "",
-                log_mod: "",
-                log_chat:"",
-                log_user: "",
-                rift: "",
-            },
-            roles:{
-                staff: "",
-                admin: "",
-                moderator: "",
-                mute: "",
-                welcome: "",
-            },
-            blacklist: [
-                //{id:"", time:"", reason:""}
-            ],
-        };
-    };
+    if(!await bot.db2.Guilds_hasGuild(guild.id)) await bot.db2.Guilds_createGuild(guild);
+    else await bot.db2.Guilds_updateStatus(guild.id, true);
 
-    try{
-        await bot.db.edit("Guilds", {id:guild.id}, data);
-    }catch(err){
-        err = true;
-    };
+    let embed = new bot.util.helpers.Embed().GuildJoined(guild);
 
-    bot.send('guildStatus', msg);
-    if(err) bot.send('guildStatus', `There was an error posting guild ${guild.id}`);
+    bot.send('guildStatus', embed);
 };

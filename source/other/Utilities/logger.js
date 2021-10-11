@@ -13,7 +13,7 @@ const timeStamp = async function(){
     let minute = d.getMinutes(); if(minute.toString().length == 1) minute = `0${minute}`;
     let seconds = d.getSeconds(); if(seconds.toString().length == 1) seconds = `0${seconds}`;
     let milSeconds = d.getMilliseconds();
-    if(milSeconds.toString().length == 1){ milSeconds = `00${"milSeconds"}`; }
+    if(milSeconds.toString().length == 1){ milSeconds = `00${milSeconds}`; }
     else if(milSeconds.toString().length == 2){ milSeconds = `0${milSeconds}`; };
 
     result += `${year}/${month}/${day} ${hour}:${minute}:${seconds} (${milSeconds})`
@@ -32,6 +32,14 @@ const filePrint = async function(data){
     if(data.file && !validFiles.includes(data.file)) return `${data.file} is not a supported file... Try these instead: ${validFiles.join(", ")}`;
 
     let timestamp = await timeStamp();
+    if(
+        data.msg.startsWith('Initialized the database')
+        //data.msg.startsWith('')
+        //data.msg.includes('')
+    ) return; //don't want to log this..
+
+    if(data.msg.startsWith('Client Ready.')) data.msg == 'Client Ready.'
+
     let fileContent = `\n\n[${timestamp}]\n> ${data.msg}`;
 
     if(data.file) fs.writeFile(`./source/logs/${data.file}.txt`, fileContent, { flag: 'a+' }, err => {

@@ -18,7 +18,6 @@ command.help = "";
 
 command.invalidUsage = async function(message, type){
     if(!type) type == 'undefined';
-    let prefix = message.client.Guilds[message.guild.id].prefix || message.client.config.prefix;
     let msg = `\`Internal Error: Commands.todo.invalidUsage()\`\n\`\`\`js\n  'msg' was not set, check the type or the switch!\n  type: ${type}\`\`\``;
 
     if(!type){
@@ -36,6 +35,10 @@ command.invalidUsage = async function(message, type){
         default: msg = msg;
     };
 
+    let prefix = message.client.config.prefix;
+    if(message.client.Guilds[message.guild.id] && message.client.Guilds[message.guild.id].prefix){
+        prefix = message.client.Guilds[message.guild.id].prefix
+    };
     msg = msg.replace(/{prefix}/g, prefix);
     msg = msg.replace(/{cmdName}/g, await L(message, 'name'));
     msg = msg.replace('{$cmd_todo_args_list}', await L(message, 'args_list'));
@@ -44,6 +47,11 @@ command.invalidUsage = async function(message, type){
 };
 
 command.Execute = async function(message, args){
+
+    let prefix = message.client.config.prefix;
+    if(message.client.Guilds[message.guild.id] && message.client.Guilds[message.guild.id].prefix){
+        prefix = message.client.Guilds[message.guild.id].prefix
+    };
 
     let add = await L(message, 'args_add');
     add = add.split(";");
@@ -55,6 +63,9 @@ command.Execute = async function(message, args){
         let list = await message.client.db2.todo_get(message.author.id);
         if(!list){
             let msg = await L(message, "noToDos");
+            msg = msg.replace(/{prefix}/g, prefix);
+            msg = msg.replace(/{cmdName}/g, await L(message, 'name'));
+
             return message.channel.send(msg);
         }else{
             let list2 = [];

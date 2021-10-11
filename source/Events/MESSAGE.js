@@ -13,7 +13,7 @@ module.exports = async (message) => {
     //if(message.author.id != "213250789823610880") return;
 
     let wasModule = await message.client.functions['ShadowModules'].checkForValidModules(message);
-    if(wasModule) return stats.mods++;
+    if(wasModule) return bot.stats.mods++;
 
     let p = "..";
     if(!message.content.startsWith(p)) return;
@@ -27,8 +27,11 @@ module.exports = async (message) => {
         if(!Cmd) return;
 
 
+        if(!await bot.db2.Users_hasUser(message.author.id)) await bot.db2.Users_createUser(message.author);
+        if(!bot.Users[message.author.id]) bot.Users[message.author.id] = await bot.db2.Users_getUser(message.author.id);
 
-        if(!bot.Users[message.author.id]){
+
+        /*if(!bot.Users[message.author.id]){
             let data = {
                 id: message.author.id,
                 prefix: bot.config.prefix,
@@ -41,7 +44,7 @@ module.exports = async (message) => {
 
         // Since we have a command we need to be sure to set the users' language.
         // We need to check the database for an existing language, otherwise use en/us.
-        if(!bot.Users[message.author.id].lang) bot.db.get("Users", {id:message.author.id}, {_id:0, id:1, lang:1})
+        if(!bot.Users[message.author.id].locale) bot.db.get("Users", {id:message.author.id}, {_id:0, id:1, lang:1})
         .then(results => {
             if(results.length != 0 && results[0].lang != null){
                 bot.Users[message.author.id].lang = results[0].lang;
@@ -50,7 +53,7 @@ module.exports = async (message) => {
                 .catch(err => bot.util.logger.error(`Error occured while editing user data:\n`, err));
                 bot.Users[message.author.id].lang = 'en'
             };
-        });
+        });*/
 
 
         if(Cmd.Access){

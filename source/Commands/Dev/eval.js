@@ -11,22 +11,25 @@ command = {
 command.help = "";
 
 
-function clean(text, bot){
-    if (typeof(text) === "string") return text
+async function clean(text, bot){
+    if(typeof(text) === "string") return text
         .replace(/`/g, "`" + String.fromCharCode(8203))
         .replace(/@/g, "@" + String.fromCharCode(8203))
         .replace(bot.token, "INVALID-TOKEN");
-    else return text;
+
+    else return text; //require("util").inspect(text);
 };
 
+
 /*const clean = async (evaled, bot) => {
-    //if (evaled && evaled.constructor.name == "Promise") evaled = await evaled;
+    if (evaled && evaled.constructor.name == "Promise") evaled = await evaled;
 
     if (typeof evaled !== "string") evaled = require("util").inspect(evaled);
 
     evaled = evaled
-      .replace(/`/g, "`" + String.fromCharCode(8203))
-      .replace(/@/g, "@" + String.fromCharCode(8203));
+        .replace(/`/g, "`" + String.fromCharCode(8203))
+        .replace(/@/g, "@" + String.fromCharCode(8203))
+        .replace(bot.token, "INVALID-TOKEN");;
 
     return evaled;
 };*/
@@ -45,6 +48,7 @@ command.Execute = async function(message, args){
         let restartMsgID = null;
         await message.channel.send("Restarting....")
         .then(msg => {
+            bot.util.logger.print(`========== <   RESTARTING   > ========== <`)
             restartMsgID=msg.id;
         }).catch( restartMsgID=message.id );
 
@@ -64,7 +68,7 @@ command.Execute = async function(message, args){
         const cleaned = await clean(evaled, message.client);
         message.channel.send(cleaned, {code:"js", split:true});
     }catch(err){
-        message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``);
+        message.channel.send(`\`ERROR\` \`\`\`xl\n${await clean(err)}\n\`\`\``);
     }
 };
 

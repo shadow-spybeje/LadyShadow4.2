@@ -9,7 +9,8 @@ module.exports = async function(bot){
                 B: []
             }
         },
-        c:0 //cmds
+        c:0, //cmds
+        mods:0 //Modules
     };
     bot.config = {
         prefix:"..",
@@ -50,7 +51,7 @@ module.exports = async function(bot){
     bot.locale = await require('./Localisation/_index.js')(bot); //Load our Localisations.
     bot.l = function(msg, key){
         const bot = msg.client;
-        let lang = bot.Users[msg.author.id].lang;
+        let lang = bot.Users[msg.author.id].locale;
         let results;
 
         if(!bot.locale[lang]){
@@ -94,12 +95,27 @@ module.exports = async function(bot){
         }catch(e){ bot.util.logger.error("Module Error: Failed to Init 'Phasmo'."); };
         //#endregion
 
+        //#region Shadow RPG (SRPG/main.js)
+        try{
+            const SRPG = require("./other/SRPG/main");
+            dbCreds = require('../../.././tokens.json').db; //database credentials.
+            bot.mods.SRPG = new SRPG({
+                prefix:"/rpg",
+                dbcreds:[dbCreds.username, dbCreds.password]
+            });
+            //console.log(bot.mods.SRPG)
+
+
+            dbCreds = undefined; //Clear database creds from cache..
+        }catch(e){ bot.util.logger.error("Module Error: Failed to Init 'SRPG'.", e) };
+        //#endregion
+
     //#endregion
 
 
     bot.Users = new Map();
     bot.Guilds = new Map();
-    bot.db.get("Users", {}).then(results => {
+    /*bot.db.get("Users", {}).then(results => {
         for(let x = 0; x < results.length; x++){
             let y = results[x];
             bot.Users[y.id] = y;
@@ -111,7 +127,7 @@ module.exports = async function(bot){
             let y = results[x];
             bot.Guilds[y.id] = y;
         };
-    }).catch(err => { bot.util.logger.error(`Error loading Guild Data from the DataBase:\n`, err); });
+    }).catch(err => { bot.util.logger.error(`Error loading Guild Data from the DataBase:\n`, err); });*/
 
 
     return bot;

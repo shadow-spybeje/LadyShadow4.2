@@ -194,3 +194,50 @@ Helpers.getUserMention = async function(mention){
 Helpers.randomInt = function randomIntFromInterval(min, max) { // min and max included
     return Math.floor(Math.random() * (max - min + 1) + min)
 };
+
+
+Helpers.Embed = class {
+    constructor(){
+        const discord = require('discord.js');
+        this.embed = new discord.MessageEmbed();
+        this.embed.setTimestamp();
+        this.embed.setFooter(bot.user.tag, bot.user.avatarURL('JPEG'))
+
+        return this;
+    };
+
+    GuildJoined(guild){
+        this.embed
+            .setAuthor(`Joined guild: ${guild.name}`)
+            .setTitle(`New Count: ${guild.client.guilds.cache.size}`)
+            .setThumbnail(guild.iconURL('JPEG'))
+            .setColor('GREEN')
+
+        return this.embed;
+    };
+
+    GuildLeft(guild){
+        this.embed
+            .setAuthor(`Left guild: ${guild.name}`)
+            .setTitle(`New Count: ${guild.client.guilds.cache.size}`)
+            .setThumbnail(guild.iconURL('JPEG'))
+            .setColor('RED')
+
+        return this.embed;
+    };
+
+    MessageUpdate(oldMsg, newMsg){
+        this.embed
+            .setTitle(`Message Edited`)
+            .setColor('PURPLE')
+
+            .addField("User", `${newMsg.author.tag}\n(${newMsg.author.id})`, true)
+            .addField("Message ID", newMsg.id, true)
+            .addField("Channel", `<#${newMsg.channel.id}>`, true)
+
+            .addField("Old Message", oldMsg.content)
+            .addField("New Message", newMsg.content)
+
+        return this.embed;
+    };
+};

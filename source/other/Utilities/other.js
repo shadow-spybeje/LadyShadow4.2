@@ -52,3 +52,9 @@ Others.pad = function(array, padStart, alignLeft){
 
     return result;
 };
+
+
+
+Others.keys = async function(message, key){
+
+};

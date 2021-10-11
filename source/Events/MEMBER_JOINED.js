@@ -1,6 +1,6 @@
 module.exports = async (member) => {
     let guild = member.guild;
-    let welcome = await member.client.db2.getGuild_welcomeSettings(guild.id);
+    let welcome = await member.client.db2.Guild_Welcome(guild.id);
     if(!welcome.channel) return;
 
     let wCh = await guild.channels.cache.get(welcome.channel);
@@ -9,7 +9,7 @@ module.exports = async (member) => {
     msg = welcome.message
         .replace("{user}", member.user.username)
         .replace("{@user}", member.user)
-        .replace("{server}", member.guild.name);
+        .replace("{server}", member.guild.name)
 
     wCh.send(msg);
 

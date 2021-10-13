@@ -256,7 +256,6 @@ class DB_Helper {
             id: guild.id,
             oID: guild.ownerID,
             name: guild.name,
-            names: [],
 
             config: {
                 prefix: this.bot.config.prefix,
@@ -283,6 +282,18 @@ class DB_Helper {
                 staff: '',
                 admin: '',
                 moderator: '',
+            },
+
+            censor: {
+                whitelist: {
+                    roles: [],
+                    users: [],
+                    channels: [], //"ignore" command
+                },
+
+                phrases: { //censor.phrases[arg]
+                    //"phrase": {timestmap: int, user: int}
+                }
             }
         };
 

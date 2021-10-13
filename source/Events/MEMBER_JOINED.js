@@ -8,6 +8,7 @@ module.exports = async (member) => {
 
     msg = welcome.message
         .replace("{user}", member.user.username)
+        .replace("{userid}", member.user.id)
         .replace("{@user}", member.user)
         .replace("{server}", member.guild.name)
 

@@ -21,10 +21,10 @@ bot.on('ready', (_bot) => {
     else{ Events['READY'](_bot); };
 });
 bot.on('message', (message) => { Events['MESSAGE'](message) }); //New Message
-bot.on('guildCreate', (guild) => { Events['GUILD_JOINED'](bot, guild) }); //JoinsGuild
-bot.on('guildDelete', (guild) => { Events['GUILD_LEFT'](bot, guild) }); //LeavesGuild
-bot.on('guildMemberAdd', (member) => { Events['MEMBER_JOINED'](bot, member) }); //memberJoins
-bot.on('guildMemberRemove', (member) => { Events['MEMBER_LEFT'](bot, member) }); //memberLeaves
+bot.on('guildCreate', (guild) => { Events['GUILD_JOINED'](guild) }); //JoinsGuild
+bot.on('guildDelete', (guild) => { Events['GUILD_LEFT'](guild) }); //LeavesGuild
+bot.on('guildMemberAdd', (member) => { Events['MEMBER_JOINED'](member) }); //memberJoins
+bot.on('guildMemberRemove', (member) => { Events['MEMBER_LEFT'](member) }); //memberLeaves
 
 
 bot.login(require("../../../tokens.json").Beta)

@@ -178,6 +178,11 @@ class DB_Helper {
 
     //#region Guilds_X
 
+    /**
+     * Check if the Database has this guild.
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @returns boolean
+     */
     Guilds_hasGuild = async function(guildID){
         let result = await this.database.get("Guilds", {id:guildID}, {_id:0, id:1})
             .then(r => {
@@ -192,6 +197,13 @@ class DB_Helper {
         return result;
     };
 
+    /**
+     * Get a settings file from the database.
+     * Returns false if it does not exist.
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @param {object} proj projection of removed or wanted results.
+     * @returns object or false
+     */
     Guilds_getGuild = async function(guildID, proj){
         let p = {};
         if(proj){
@@ -218,6 +230,12 @@ class DB_Helper {
         return result;
     };
 
+    /**
+     * Updates a guild settings file with {newData}
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @param {object} newData data to chage/add to the settings.
+     * @returns boolean
+     */
     Guilds_updateGuild = async function(guildID, newData){
         if(!guildID || !newData) throw new Error(`updateGuild() must have user ID and newData!`);
         if(isNaN(guildID)) throw new Error(`updateGuild() guildID must be a number.`);
@@ -250,6 +268,11 @@ class DB_Helper {
         return result;
     };*/
 
+    /**
+     * Creates a Database settings file for the {guild}.
+     * @param {object} guild Object representing a Discord Guild.
+     * @returns Promise<settings || error>
+     */
     Guilds_createGuild = async function(guild){
         let _guild = {
             status: true,
@@ -309,6 +332,29 @@ class DB_Helper {
         return result;
     };
 
+    /**
+     * Check if the Database has this guild; if not, create one.
+     * @param {number} guildID Int representing a Discord Guild.id
+     */
+    Guilds_hasGuildx = async function(guildID){
+        return await this.Guilds_hasGuild(guildID).then(async (r) => {
+            if(!r){
+                let guild = await this.bot.guilds.cache.get(guildID);
+                await this.Guilds_createGuild(guild);
+            };
+
+            return true;
+        });
+    };
+
+    /**
+     * Updates a guilds status.
+     * Executed Automatically when shadow recieves the 'guildDestroy' event.
+     * * True: Shadow is in this guild.
+     * * False: Shadow is not in this guild.
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @param {Boolean} newStatus status of guild after update.
+     */
     Guilds_updateStatus = async function(guildID, newStatus){
         if(typeof newStatus != "boolean") throw new Error(`Guilds_updateStatus {newStatus} must be of type "boolean"!`);
 
@@ -318,12 +364,19 @@ class DB_Helper {
         })
     };
 
+    /**
+     * Gets a guilds Welcome settings
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @returns object {channel:int, message:str, roles:Array[int]} or false;
+     */
     Guild_Welcome = async function(guildID){
         let results = {
             channel: "",
             message: null,
             roles: []
         };
+
+        await this.Guilds_hasGuildx(guildID);
 
         await this.Guilds_getGuild(guildID, {
             "channels.welcome":1,
@@ -342,11 +395,18 @@ class DB_Helper {
         return results;
     };
 
+    /**
+     * Gets a guilds farewell settings
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @returns object {channel:int, message:str} or false;
+     */
     Guild_Farewell = async function(guildID){
         let results = {
             channel: "",
             message: null,
         };
+
+        await this.Guilds_hasGuildx(guildID);
 
         await this.Guilds_getGuild(guildID, {
             "channels.farewell":1,

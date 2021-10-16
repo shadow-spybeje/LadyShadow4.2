@@ -330,6 +330,7 @@ class DB_Helper {
             "roles.welcome":1,
             "messages.greeting":1
         }).then(r => {
+            if(!r) return results = false;
             if(!r.channels.welcome) return false;
             results.channel = r.channels.welcome;
             if(r.messages.greeting) results.message = r.messages.greeting;
@@ -351,6 +352,7 @@ class DB_Helper {
             "channels.farewell":1,
             "messages.farewell":1
         }).then(r => {
+            if(!r) return results = false;
             if(!r.channels.farewell) return results = false;
             results.channel = r.channels.farewell;
             if(r.messages.farewell) results.message = r.messages.farewell;

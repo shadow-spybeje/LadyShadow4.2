@@ -58,7 +58,7 @@ command.Execute = async function(message, args){
         if(kill) process.exit();
     };
 
-    let inviteLink = 'https://discord.com/oauth2/authorize?client_id=378974861046841344&scope=bot&permissions=469855430'
+    let invite = function(){ return message.channel.send('https://discord.com/oauth2/authorize?client_id=378974861046841344&scope=bot&permissions=469855430'); };
 
     let stats = `I've read a total of (${bot.stats.read.human + bot.stats.read.bot}) messages.\n  Of those, (${bot.stats.read.human}) were from humans, and (${bot.stats.read.bot}) were from other bots.\n    I have executed (${bot.stats.c}) commands for the humans.\n\nOf these messages, I have watched and learned from (${bot.stats.read.x.H.length}) different humans and (${bot.stats.read.x.B.length}) unique bots.`;
 

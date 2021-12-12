@@ -41,6 +41,102 @@ class DB_Helper {
         this.bot = bot;
     };
 
+    //#region Core DB Helpers
+    async update(table, query, newData){
+        if(!table || !query || !newData) throw new Error(`update() must have a table<String>, query<Object>, and newData<Object>!`);
+        if(typeof table !== "string") throw new Error(`update() 'table' must be a string!`);
+        if(typeof query !== "object") throw new Error(`update() query must be an object!`);
+        if(typeof newData !== "object") throw new Error(`update() newData must be an object!`);
+
+        let result = await this.database.edit(table, query, newData)
+        .then(r => { return true })
+        .catch(e => {
+            this.bot.util.logger.error(`Error updating ${table} File!`, e);
+            return false;
+        });
+
+        return result;
+    };
+
+    async fetch(table, data, proj){
+        if(!table) throw new Error(`fetch() must have a table<String>!`);
+        if(typeof table !== "string") throw new Error(`update() 'table' must be a string!`);
+
+        if(!data) data = {};
+
+        let p = {};
+        if(proj){
+            p = proj;
+        }else{
+            // Projection cannot have a mix of inclusion and exclusion.
+            //   So if we have a {proj} we cannot hide these values otherwise we'll get an error.
+            //   Besides, if the values are nto listed in our projection we wont see them anyway!
+
+            p.lastModified = 0;
+            p.createdAt = 0;
+        };
+        p._id = 0;
+
+        let result = await this.database.get(table, data, p)
+            .then(r => {
+                if(r.length == 0) return false;
+                else return r[0];
+            })
+            .catch(e => {
+                this.bot.util.logger.error(`Error checking database ${table} 'fetch():\n`, e);
+                return false;
+            });
+        return result;
+    };
+
+    async post(table, data){
+        if(!table || !data) throw new Error(`fetch() must have a table<String> and data<Object>!`);
+        if(typeof table !== "string") throw new Error(`update() 'table' must be a string!`);
+        if(typeof data !== "object") throw new Error(`update() 'data' must be an object!`);
+
+        let result = await this.database.post(table, data)
+            .then(r => {
+                return true
+            })
+            .catch(e => {
+                log.err(`Error posting to database:\n>>DB:${table} Data:${data}\n>>> ERR:${e}`);
+                return false;
+            });
+        return result;
+    };
+    //#endregion
+
+    //#region Config
+    async updateConfig(newData){
+        if(typeof newData !== "object") throw new Error(`updatConfig() newData must be an object!`);
+        let result = await this.update('_Config', newData);
+        return result;
+    };
+
+    async getConfig(proj){
+        return await this.fetch("_Config", null, proj);
+    };
+
+        //#region Blacklist
+        async getBlacklist(){
+            let config = await this.getConfig({blacklist:1});
+            return config.blacklist;
+        };
+
+        async updateBlacklist(newData){
+            if(typeof newData !== "object") throw new Error(`updateBlacklist() newData must be an object!`);
+
+            let result = await this.database.edit("_Config", {id:0}, newData)
+            .then(r => { return true })
+            .catch(e => {
+                this.bot.util.logger.error(`Error updating Configuration File!`, e);
+                return false;
+            });
+
+            return result;
+        };
+        //#endregion
+    //#endregion
 
     //#region Users_X
     /**
@@ -89,7 +185,7 @@ class DB_Helper {
     };
 
     Users_updateUser = async function(userID, newData){
-        if(!userID || !newData) throw new Error(`updateUser() must have bot a user ID and newData!`);
+        if(!userID || !newData) throw new Error(`updateUser() must have a user ID and newData!`);
         if(isNaN(userID)) throw new Error(`updateUser() userID must be a number.`);
         if(typeof newData !== "object") throw new Error(`updateUser() newData must be an object!`);
 
@@ -387,7 +483,6 @@ class DB_Helper {
             if(!r.channels.welcome) return false;
             results.channel = r.channels.welcome;
             if(r.messages.greeting) results.message = r.messages.greeting;
-            else results.message = `Welcome to the server {@user}`;
             if(r.roles.welcome.length > 0) results.roles = r.roles.welcome;
         });
 
@@ -416,25 +511,102 @@ class DB_Helper {
             if(!r.channels.farewell) return results = false;
             results.channel = r.channels.farewell;
             if(r.messages.farewell) results.message = r.messages.farewell;
-            else results.message = `{@user} has left the server...`;
         });
 
         return results;
     };
     //#endregion
 
-    todo_get = async function(userID){
-        let todoList = {};
-        await this.database.get("Users", {id:userID}, {_id:0, todo:1}).then(async (results) => {
-            let todo = results[0].todo;
-            if(!todo || todo.length == 0){
-                todoList = false;
-                await this.database.edit("Users", {id:userID}, {"todo": []})
-            }else{
-                todoList = todo;
-            };
+    getToDos = async function(userID){
+        let user = await this.fetch("Users", {id:userID}, {_id:0, todo:1});
+        return user.todo;
+    };
+
+    // =======
+    // =======
+
+    /**
+     * Get a settings file from the database.
+     * @param {number} userID Int representing a Discord User.id
+     * @returns Object or false
+     */
+    getUser = async function(userID){
+        return await this.fetch("Users2", {id:userID});
+    };
+
+    createUser = async function(userData){
+        let result = await this.database.post("Users2", userData)
+        .then(r => {
+            return userData;
+        })
+        .catch(err => {
+            this.bot.util.logger.error(`Error creating user 'DB_Helper.createUser()'`, err);
+            return err;
         });
-        return todoList;
+
+        return result;
+    };
+
+    updateUser = async function(userID, newData){
+        log.print(`Updating User: ${bot.users.cache.get(userID).username} (${userID}): Data:\`\`\`${JSON.stringify(newData)}\`\`\``, 'users');
+        return await this.update("Users2", {id:userID}, newData);
+    };
+
+
+    /**
+     * Get a settings file from the database.
+     * @param {number} guildID Int representing a Discord Guild.id
+     * @returns Object or false
+     */
+    getGuild = async function(guildID){
+        return await this.fetch("Guilds2", {id:guildID});
+    };
+
+    createGuild = async function(guildData){
+        let result = await this.database.post("Guilds2", guildData)
+        .then(r => {
+            return guildData;
+        })
+        .catch(err => {
+            this.bot.util.logger.error(`Error creating guild 'DB_Helper.createGuild()'`, err);
+            return err;
+        });
+
+        return result;
+    };
+
+    updateGuild = async function(guildID, newData){
+        log.print(`Updating Guild: ${bot.guilds.cache.get(guildID).name} (${guildID}): Data:\`\`\`${JSON.stringify(newData)}\`\`\``, 'guilds');
+        return await this.update("Guilds2", {id:guildID}, newData);
+    };
+
+    /**
+     *
+     * @param {integer} guildID Disscord Guild ID
+     * @param {string} newPrefix new prefix for this guild.
+     * @returns
+     */
+    updateGuildPrefix = async function(guildID, newPrefix){
+        return await this.updateGuild(guildID, { "config.prefix":newPrefix });
+    };
+
+
+
+
+    getLogs = async function(data){
+        log.print(`Fetching ChatLogs for the following paramters:\n>>> ${JSON.stringify(data)}`);
+        let limit;
+        if(data.limit){ limit = data.limit; data.limit = null; };
+
+        let logs = await this.database.get("ChatLogs", data, {_id:0, createdAt:0, lastModified:0}, limit, {"timestamp.createdAt":-1})
+            .then(r => {
+                if(!r[0]) return false;
+                else return r;
+            }).catch(e => {
+                this.bot.util.logger.error(`Error checking database ${table} 'getLogs(${JSON.stringify(data)})':\n`, e);
+                return false;
+            });
+        return logs;
     };
 };
 

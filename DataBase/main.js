@@ -66,7 +66,7 @@ function post(collection, data){
     return promise;
 };
 
-function get(collection, query, _projection){
+function get(collection, query, _projection, limit, sort){
     let database = null;
     if(!query){ query = {} };
 
@@ -79,9 +79,9 @@ function get(collection, query, _projection){
         })
         .then((collection)=>{
             if(!_projection){
-                return collection.find(query).toArray();
+                return collection.find(query).sort(sort).limit(Number(limit)).toArray();
             }else{
-                return collection.find(query).project(_projection).toArray();
+                return collection.find(query).project(_projection).sort(sort).limit(Number(limit)).toArray();
             }
         })
         .then((result)=>{

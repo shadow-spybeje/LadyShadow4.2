@@ -20,11 +20,13 @@ const timeStamp = async function(){
     return result;
 };
 
-const log = function(txt){
+const _log = function(txt){
     console.log(`\n${txt}`);
 };
 
-const fs = require('fs')
+const { DiscordAPIError } = require('discord.js');
+const fs = require('fs');
+const { msg } = require('../phasmo');
 
 const validFiles = ['err', 'warn', 'log', 'debug'];
 const filePrint = async function(data){
@@ -38,7 +40,7 @@ const filePrint = async function(data){
         //data.msg.includes('')
     ) return; //don't want to log this..
 
-    if(data.msg.startsWith('Client Ready.')) data.msg == 'Client Ready.'
+    if(data.msg.includes('Client Ready.')) data.msg == 'Client Ready.'
 
     let fileContent = `\n\n[${timestamp}]\n> ${data.msg}`;
 
@@ -75,7 +77,7 @@ Logger.emit = function(msg){
  */
 Logger.print = function(msg){
     if(!msg) return;
-    log(`> ${msg}`);
+    _log(`> ${msg}`);
     filePrint({msg:msg});
 };
 
@@ -85,7 +87,7 @@ Logger.print = function(msg){
  */
 Logger.debug = function(msg){
     if(!msg) return;
-    log(`(DEBUG) ${msg}`);
+    _log(`(DEBUG) ${msg}`);
     filePrint({file: 'debug', msg:`(DEBUG) ${msg}\n${error}`});
 };
 
@@ -95,7 +97,7 @@ Logger.debug = function(msg){
  */
 Logger.warn = function(msg){
     if(!msg) return;
-    log(`(WARNING) ${msg}`);
+    _log(`(WARNING) ${msg}`);
     filePrint({file: 'warn', msg:`(WARNING) ${msg}\n${error}`});
 };
 
@@ -105,7 +107,7 @@ Logger.warn = function(msg){
  */
 Logger.error = function(msg, error){
     if(!msg) return;
-    log(`(ERROR) ${msg}`);
+    _log(`(ERROR) ${msg}`);
     if(error){
         console.error(error);
         filePrint({file: 'err', msg:`(ERROR) ${msg}\n${error.stack}`});
@@ -114,3 +116,89 @@ Logger.error = function(msg, error){
         filePrint({file: 'err', msg:`(ERROR) ${msg}`});
     };
 };
+
+
+/**
+ * Functions that log to files and console.
+ */
+global.log = {};
+
+
+function badFile(data){
+    let msg = `Aborted a logging > File: \`${data.file}\` Msg: ${data.mg}`;
+
+    post({msg:msg, file:'warn'});
+};
+
+const files = ['log', 'err', 'warn', 'shdw', 'unlabled',
+  'users', 'guilds', // Used for logging settings changes.
+];
+/**
+ *
+ * @param {object} data information to post
+ * * <data.msg>: message to post.
+ * * [data.file]: file to post in (defualt file: "unlabeled")
+ * * * log
+ * * * warn
+ * * * err
+ * * * shdw (say/sayd messages)
+ */
+async function post(data){
+    if(!data || !data.msg) return; //Cannot log an empty message...
+    if(!data.file) data.file = "unlabled";
+    if(!files.includes(data.file)) return badFile(data);
+
+    if(data.file == 'err' && data.err) data.msg = `${data.msg}\`\`\` ${data.err.stack}\`\`\``
+
+    let timestamp = await timeStamp();
+    let fileContent = `\n\n[${timestamp}]\n> ${data.msg}`;
+
+    await fs.writeFile(`./source/logs/${data.file}.txt`, fileContent, { flag: 'a+' }, err => {
+        if (err) {
+          console.error(err)
+          return err
+        };
+        return true; //file written successfully
+    });
+
+    // Check if the bot is in it's "Ready" state.
+    if(!bot.readyAt) return;
+
+    // Since we're "Ready", let's post this to our discord console.
+    switch(data.file){ //Shadow Support / Shadow Management / console_${data.file}
+        case('log'): ch='908164694517375007'; break;
+        case('warn'): ch='908164721948123137'; break;
+        case('err'): ch='908164746031812668'; break;
+        case('unlabled'): ch='908164766546149466'; break;
+        case('shdw'): ch='912472707898146877'; break;
+
+        default: ch='908164766546149466';
+    };
+    if(!ch) return post({file:'warn', msg:`Discord Console was unable to find the channel for file \`${data.file}\``});
+
+    let title = ''; // '(TITLE)'
+    if(data.file != 'log' && data.file != 'unlabled'){
+        _title = '';
+        if(data.file == 'warn') _tittle = '(WARNING)';
+            else if(data.file == 'err') _title = '(ERROR)';
+        title = _title;
+    };
+    let msg = `${title} ${data.msg}`;
+
+    bot.channels.cache.get(ch).send(msg);
+};
+
+let ignoredFiles = ['shdw', 'unlabled'];
+log.print = function(msg, file){ if(!ignoredFiles.includes(file)) console.log(`\n`+msg);
+    if(msg.startsWith('Client Ready.')) return;
+    if(!file) return post({msg:msg, file:"log"});
+    post({msg:msg, file:file});
+};
+
+log.warn = function(msg){ console.log(`\n(WARN) ` +msg); post({msg:msg, file:"warn"}); };
+
+/**
+ * @param {string} msg Message for the error
+ * @param {string} error The error itself.
+ */
+log.error = function(msg, error){ console.log(`\n(ERROR) ` +msg+`\n  `+error.stack); post({msg:msg, err:error, file:"err"}); };

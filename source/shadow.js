@@ -9,7 +9,8 @@ const discord = require("discord.js");
  * * * LadyShadow is a basic Discord Moderation bot with other logging features.
  * * * Shadow includes other "fun" commands, as well as being the central hub for a Server to Server "Rift" and the main place for the "Shadow RPG".
  */
-const bot = new discord.Client({ ws: { intents: 14087 } });
+//const bot = new discord.Client({ ws: { intents: 14087 } }); global.bot = bot;
+const bot = new discord.Client({ ws: { intents: 14087 }, fetchAllMembers: true }); global.bot = bot;
 
 require('./startUp.js')(bot);
 
@@ -20,7 +21,7 @@ bot.on('ready', (_bot) => {
     if(!_bot){ Events['READY'](bot); }
     else{ Events['READY'](_bot); };
 });
-bot.on('message', (message) => { Events['MESSAGE'](message) }); //New Message
+bot.on('message', (message) => { Events['MESSAGE_OLD'](message) }); //New Message
 bot.on('guildCreate', (guild) => { Events['GUILD_JOINED'](guild) }); //JoinsGuild
 bot.on('guildDelete', (guild) => { Events['GUILD_LEFT'](guild) }); //LeavesGuild
 bot.on('guildMemberAdd', (member) => { Events['MEMBER_JOINED'](member) }); //memberJoins
@@ -28,3 +29,23 @@ bot.on('guildMemberRemove', (member) => { Events['MEMBER_LEFT'](member) }); //me
 
 
 bot.login(require("../../../tokens.json").Beta)
+
+
+/*const config = {
+    token : require("../../../tokens.json").LadyShadow
+};
+
+class LadyShadow {
+    constructor(){
+        this.discord = this.bot = global.bot = new discord.Client( config.token, {
+            restMode: true, defualtImageFormat: 'png'
+        });
+
+        this.bot.on('ready', () => { console.log("READY")});
+        console.log("Init discord/bot");
+
+        this.bot.login(config.token)
+    };
+};
+
+new LadyShadow();*/

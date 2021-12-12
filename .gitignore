@@ -1,3 +1,7 @@
 
 source/logs/log.txt
 source/logs/err.txt
+source/logs/guilds.txt
+source/logs/shdw.txt
+source/logs/warn.txt
+source/logs/users.txt

@@ -4,9 +4,11 @@ module.exports = async function(bot){
         read: { //read Messages
             human:0,
             bot: 0,
+            webhook: 0,
             x: {
                 H: [],
-                B: []
+                B: [],
+                W: []
             }
         },
         c:0, //cmds
@@ -109,6 +111,9 @@ module.exports = async function(bot){
             dbCreds = undefined; //Clear database creds from cache..
         }catch(e){ bot.util.logger.error("Module Error: Failed to Init 'SRPG'.", e) };
         //#endregion
+
+        const GameChanger = require("./other/events.js").GameChanger;
+        bot.mods.GameChanger = GameChanger;
 
     //#endregion
 

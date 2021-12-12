@@ -93,7 +93,7 @@ phasmo._Init = function(options = {}){
 /**
  * Our built-in ghost database!
  */
- phasmo.ghosts = [
+phasmo.ghosts = [
     /*{
         type: "",
         evidence: [],
@@ -209,7 +209,31 @@ phasmo._Init = function(options = {}){
         "strength": "Talking near it makes it angrier and more likely to attack",
         "weakness": "When hunting, it can only hear close to it",
         "tip": "It appears this ghost can hunt above 50% sanity if you make it angry enough by talking."
-    }
+    },{
+        type: "Obake",
+        evidence: ["EMF 5", "Fingerprints", "Ghost Orbs"],
+        strength: "Rarely leaves a trace when interacting with the environment.",
+        weakness: "Sometimes leaves behind unique evidence.",
+        tip: "This ghost can shapeshift, changing its model whenever it pleases."
+    },{
+        type: "Raiju",
+        evidence: ["EMF 5", "Ghost Orbs", "DOTS Projector"],
+        strength: "Moves faster near electrical devices.",
+        weakness: "Constantly disrupt electronic equipment.",
+        tip: "Unless you have thrown all electrical equipment out of the window, it is as fast as a Revenant when hunting."
+    },{
+        type: "Twins",
+        evidence: ["EMF 5", "Freezing Temps", "Spirit Box"],
+        strength: "Either ghost can become angry and start a hunt",
+        weakness: "Both ghosts will tend to interact with the enviorment at the same time.",
+        tip: "Using sound sensors makes these ghosts easier to identify as they interact in different areas."
+    },{
+        type: "Onryo",
+        evidence: ["Freezing Temps", "Ghost Orbs", "Spirit Box"],
+        strength: "Extinguishing a flame can cause an Onryo to attack.",
+        weakness: "When threatened, this ghost will be less likely to hunt.",
+        tip: "The Onryo is scared of candles! Keep them lit near its room so it has a smaller chance to hunt."
+    },
 ];
 
 /**

@@ -1,21 +1,5 @@
 module.exports = async (bot) => {
-
-    await bot.user.setPresence({
-        status: "idle",
-        _activity: {
-            type: "STREAMING",
-            name: `the Beta Version. | ${bot.config.prefix}help`,
-            url: "https://www.twitch.tv/scion_spy"
-        },
-        activity: {
-            type: "WATCHING",
-            name: `${bot.config.prefix}help | v.${bot.config.version}`,
-        }
-    });
-
-    let p = bot.user.presence;
-    let a = p.activities[0];
-    bot.util.logger.print(`Client Ready.\n> • ${bot.user.tag} (${bot.user.id}) | (${p.status}) "${a.type}: ${a.name}"`);
+    //return console.log('READY');
 
     //#region Eval Restart ('eval k()') checker, notify complete if was an eval restart.
     bot.db.get("_Config", {}, {_id:0})
@@ -38,5 +22,22 @@ module.exports = async (bot) => {
         })
     //#endregion
 
+    /*await bot.user.setPresence({
+        status: "idle",
+        _activity: {
+            type: "STREAMING",
+            name: `the Beta Version. | ${bot.config.prefix}help`,
+            url: "https://www.twitch.tv/scion_spy"
+        },
+        activity: {
+            type: "WATCHING",
+            name: `${bot.config.prefix}help | v.${bot.config.version}`,
+        }
+    });*/
+
+    log.print(await bot.mods.GameChanger());
+    let p = bot.user.presence;
+    let a = p.activities[0];
+    log.print(`Client Ready.\n> • ${bot.user.tag} (${bot.user.id}) | (${p.status}) "${a.type}: ${a.name}"`);
 
 };

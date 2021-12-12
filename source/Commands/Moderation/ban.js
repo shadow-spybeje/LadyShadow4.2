@@ -17,7 +17,7 @@ command = {
 command.help = "";
 
 command.Execute = async function(message, args){
-    if(message.author.id != "213250789823610880")return
+    if(message.author.id != "213250789823610880") return
 
     if(!message.member.hasPermission("BAN_MEMBERS")) return message.reply(await L(message, "noPerms-Author"));
     if(!message.guild.me.hasPermission("BAN_MEMBERS")) return message.reply(`${await L(message, `noPerms-Client`)} ${member.username}\`!\n--> ${member}`)

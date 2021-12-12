@@ -16,7 +16,10 @@ command.help = "";
 
 command.Execute = async function(message, args){
     try{
-        message.delete().then(message.channel.send(args.join(" ")))
+        message.delete().then(()=>{
+            log.print(`\`${message.author.tag} Executed 'sayd' cmd.\` (userID:${message.author.id} | msgID:${message.id})\n>>> ${message.content}`, 'shdw');
+            message.channel.send(args.join(" "))
+        });
     }catch(err){
         return;
     };

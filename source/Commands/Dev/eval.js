@@ -42,6 +42,10 @@ command.Execute = async function(message, args){
     const e = new discord.MessageEmbed();
     const bot = message.client;
 
+    var settings = {
+        g: await bot.db2.Guilds_getGuild(message.guild.id),
+        u: await bot.db2.Users_getUser(message.author.id)
+    };
 
     k = async function(){
         let kill = false;

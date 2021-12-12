@@ -5,8 +5,10 @@ const EventList = keyMirror([
     'GUILD_LEFT', // guildDelete
     'MEMBER_JOINED', //guildMemberAdd
     'MEMBER_LEFT', //guildMemberRemove
-    'MESSAGE', // message
+    'MESSAGE_OLD', // message
+    'MESSAGE', //message //ToBe new handle
     'READY', // ready
+    'ERROR', // info, error, warn
 ]);
 
 
